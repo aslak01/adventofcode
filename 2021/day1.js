@@ -1,16 +1,28 @@
-var fs = require('fs')
-var text = fs.readFileSync('./day1.txt', 'utf-8')
-var textByLine = text.split('\n')
+const fs = require('fs')
+const text = fs.readFileSync('./day1.txt', 'utf-8').trim()
+let line = text.split('\n')
 
-textByLine = textByLine.map((n) => parseInt(n))
+line = line.map((x) => Number(x))
 
-let increases = 1
-for (let i = 0; i < textByLine.length; i++) {
-  if (i > 0) {
-    if (textByLine[i] > textByLine[i - 1]) {
+const increaseChecker = (input) => {
+  let increases = 0
+  for (let i = 1; i < input.length; i++) {
+    if (input[i] > input[i - 1]) {
       increases++
     }
   }
+  console.log(increases)
 }
 
-console.log(increases)
+increaseChecker(line)
+
+let threeMeasureArr = []
+for (let i = 0; i < line.length; i++) {
+  let threeMeasure = 0
+  if (i < line.length - 2) {
+    threeMeasure = line[i] + line[i + 1] + line[i + 2]
+    threeMeasureArr.push(threeMeasure)
+  }
+}
+
+increaseChecker(threeMeasureArr)
