@@ -1,14 +1,17 @@
 const fs = require('fs')
 const file = fs.readFileSync('./day4.txt', 'utf-8')
 
-const day4pt1 = (file) => {
+const day4 = (file) => {
+  // cleanup
   const lines = file.trim().split('\n\n')
 
+  // separate out bingo call numbers
   const numbers = lines
     .shift()
     .split(',')
     .map((n) => parseInt(n))
 
+  // separate out bingo boards
   // boards split at newline
   let boards = lines.map((x) => x.split('\n'))
   // boards split at space and int parsed
@@ -16,8 +19,7 @@ const day4pt1 = (file) => {
   // removing NaNs from boards where single digits had leading zeroes
   boards = boards.map((x) => x.map((n) => n.filter((n) => n || n === 0)))
 
-  // console.log(boards, numbers)
-
+  // util methods
   const findFirst = (array) =>
     array.reduce((prev, curr) =>
       prev.highestIndex < curr.highestIndex ? prev : curr
@@ -26,7 +28,9 @@ const day4pt1 = (file) => {
     array.reduce((prev, curr) =>
       prev.highestIndex > curr.highestIndex ? prev : curr
     )
+  const sum = (array) => array.reduce((a, b) => a + b, 0)
 
+  // find winning boards and the points at which they won
   const findBingo = (numbers, board, boardnumber) => {
     const boardID = boardnumber
 
@@ -41,7 +45,7 @@ const day4pt1 = (file) => {
     const rows = findRows(board).rows
     const cols = findRows(board).cols
 
-    // console.log(rows, cols, boardID, board)
+    // find diagonals suggested by copilot:
     // const diag1 = board.map((x, i) => x[i])
     // const diag2 = board.map((x, i) => x[board.length - 1 - i])
     let winners = {
@@ -49,14 +53,11 @@ const day4pt1 = (file) => {
       winners: [],
       lowestIndexSum: '',
     }
+    const findIndexes = (array) => array.map((x) => numbers.indexOf(x))
     for (row of rows) {
-      if (
-        row.every((x) => numbers.includes(x))
-        // || diag1.every((x) => numbers.includes(x)) ||
-        // diag2.every((x) => numbers.includes(x)))
-      ) {
-        const numberIndexes = row.map((x) => numbers.indexOf(x))
-        const sumofIndexes = numberIndexes.reduce((a, b) => a + b)
+      if (row.every((x) => numbers.includes(x))) {
+        const numberIndexes = findIndexes(row)
+        const sumofIndexes = sum(numberIndexes)
         const highestIndex = Math.max(...numberIndexes)
         winners.winners.push({
           boardID,
@@ -70,8 +71,8 @@ const day4pt1 = (file) => {
     }
     for (col of cols) {
       if (col.every((x) => numbers.includes(x))) {
-        const numberIndexes = col.map((x) => numbers.indexOf(x))
-        const sumofIndexes = numberIndexes.reduce((a, b) => a + b)
+        const numberIndexes = findIndexes(col)
+        const sumofIndexes = sum(numberIndexes)
         const highestIndex = Math.max(...numberIndexes)
         winners.winners.push({
           boardID,
@@ -82,14 +83,13 @@ const day4pt1 = (file) => {
           type: 'col',
         })
       }
-      // console.log(winners)
     }
+    // get first winner amongst the winning rows and cols and return it
     const first = findFirst(winners.winners)
-    // console.log('winners', winners.winners)
-    // console.log('first', first)
     return first
   }
 
+  // do the bingo search on each board
   const searchBoards = (numbers, boards) => {
     let winners = []
     for (const [index, board] of boards.entries()) {
@@ -97,34 +97,35 @@ const day4pt1 = (file) => {
     }
     return winners
   }
-  const winners = searchBoards(numbers, boards)
-  // console.log(winners)
 
+  // identifying actual winners (& losers)
+  const winners = searchBoards(numbers, boards)
   const firstWinner = findFirst(winners)
   const lastWinner = findLast(winners)
-  console.log('lastWinner', lastWinner)
-  console.log('firstWinner', firstWinner)
   const firstWinnerBoard = boards[firstWinner.boardID]
   const lastWinnerBoard = boards[lastWinner.boardID]
-  // console.log('firstWinner board', boards[firstWinner.boardID])
 
-  const findFirstWinnerNumbers = (winner, winnerInfo) => {
+  const doThePuzzleCalculation = (winner, winnerInfo) => {
     const winnerNrs = winner.flat()
     const wonAtCall = winnerInfo.highestIndex
     const numbersAtWin = numbers.slice(0, wonAtCall + 1)
     const winnerUncalledNrs = winnerNrs.filter((n) => !numbersAtWin.includes(n))
-    const sumOfUncalledNrs = winnerUncalledNrs.reduce((a, b) => a + b)
-    console.log('numbers', numbers, 'numbers called at win', numbersAtWin)
-    console.log('winning boards nrs', winnerNrs)
-    console.log('uncalled numbers', winnerUncalledNrs)
-    console.log('sum of uncalled', sumOfUncalledNrs)
+    const sumOfUncalledNrs = sum(winnerUncalledNrs)
     const winningNumber = numbers[wonAtCall]
-    console.log('winning nr', winningNumber)
-    console.log('factor', sumOfUncalledNrs * winningNumber)
-    // 80544, 71328 too high
+    const factor = sumOfUncalledNrs * winningNumber
+    // console.log('numbers', numbers, 'numbers called at win', numbersAtWin)
+    // console.log('winning boards nrs', winnerNrs)
+    // console.log('uncalled numbers', winnerUncalledNrs)
+    // console.log('sum of uncalled', sumOfUncalledNrs)
+    // console.log('winning nr', winningNumber)
+    // console.log('factor', factor)
+    return factor
   }
-  findFirstWinnerNumbers(firstWinnerBoard, firstWinner)
-  findFirstWinnerNumbers(lastWinnerBoard, lastWinner)
+  const winnerfactor = doThePuzzleCalculation(firstWinnerBoard, firstWinner)
+  const loserfactor = doThePuzzleCalculation(lastWinnerBoard, lastWinner)
+
+  console.log('lastWinner', lastWinner, 'winnerfactor:', winnerfactor)
+  console.log('firstWinner', firstWinner, 'loserfactor:', loserfactor)
 }
 
-day4pt1(file)
+day4(file)
