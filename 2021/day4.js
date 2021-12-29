@@ -18,6 +18,11 @@ const day4pt1 = (file) => {
 
   // console.log(boards, numbers)
 
+  const findFirst = (array) =>
+    array.reduce((prev, curr) =>
+      prev.sumofIndexes < curr.sumofIndexes ? prev : curr
+    )
+
   const findBingo = (numbers, board, boardnumber) => {
     const boardID = boardnumber
 
@@ -35,7 +40,11 @@ const day4pt1 = (file) => {
     // console.log(rows, cols, boardID, board)
     // const diag1 = board.map((x, i) => x[i])
     // const diag2 = board.map((x, i) => x[board.length - 1 - i])
-    let winners
+    let winners = {
+      boardID,
+      winners: [],
+      lowestIndexSum: '',
+    }
     for (row of rows) {
       if (
         row.every((x) => numbers.includes(x))
@@ -44,18 +53,37 @@ const day4pt1 = (file) => {
       ) {
         const numberIndexes = row.map((x) => numbers.indexOf(x))
         const sumofIndexes = numberIndexes.reduce((a, b) => a + b)
-        winners = { boardID: { row, numberIndexes, sumofIndexes } }
+        const highestIndex = Math.max(...numberIndexes)
+        winners.winners.push({
+          boardID,
+          numbers: row,
+          numberIndexes,
+          sumofIndexes,
+          highestIndex,
+          type: 'row',
+        })
       }
     }
     for (col of cols) {
       if (col.every((x) => numbers.includes(x))) {
         const numberIndexes = col.map((x) => numbers.indexOf(x))
         const sumofIndexes = numberIndexes.reduce((a, b) => a + b)
-        winners = { [boardID]: { col, numberIndexes, sumofIndexes } }
+        const highestIndex = Math.max(...numberIndexes)
+        winners.winners.push({
+          boardID,
+          numbers: col,
+          numberIndexes,
+          sumofIndexes,
+          highestIndex,
+          type: 'col',
+        })
       }
       // console.log(winners)
     }
-    return winners
+    const first = findFirst(winners.winners)
+    // console.log('winners', winners.winners)
+    // console.log('first', first)
+    return first
   }
 
   const searchBoards = (numbers, boards) => {
@@ -66,13 +94,28 @@ const day4pt1 = (file) => {
     return winners
   }
   const winners = searchBoards(numbers, boards)
-  console.log(winners)
-  const findFirst = (array) =>
-    array.reduce((prev, curr) =>
-      prev.sumofIndexes < curr.sumofIndexes ? prev : curr
-    )
+  // console.log(winners)
+
   const firstWinner = findFirst(winners)
   console.log('firstWinner', firstWinner)
+  const firstWinnerBoard = boards[firstWinner.boardID]
+  // console.log('firstWinner board', boards[firstWinner.boardID])
+
+  const findFirstWinnerNumbers = (winner, winnerInfo) => {
+    const winnerNrs = winner.flat()
+    const wonAtCall = winnerInfo.highestIndex
+    const numbersAtWin = numbers.slice(0, wonAtCall)
+    const winnerUncalledNrs = winnerNrs.filter((n) => !numbersAtWin.includes(n))
+    const sumOfUncalledNrs = winnerUncalledNrs.reduce((a, b) => a + b, 0)
+    console.log('uncalled numbers', winnerUncalledNrs)
+    console.log('numbers', numbers, 'numbers at win', numbersAtWin)
+    console.log('sum of uncalled', sumOfUncalledNrs)
+    const winningNumber = numbers[wonAtCall]
+    console.log('winning nr', winningNumber)
+    console.log('factor', sumOfUncalledNrs * winningNumber)
+    // 80544 too high
+  }
+  findFirstWinnerNumbers(firstWinnerBoard, firstWinner)
 }
 
 day4pt1(file)
