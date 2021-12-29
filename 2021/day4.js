@@ -20,7 +20,11 @@ const day4pt1 = (file) => {
 
   const findFirst = (array) =>
     array.reduce((prev, curr) =>
-      prev.sumofIndexes < curr.sumofIndexes ? prev : curr
+      prev.highestIndex < curr.highestIndex ? prev : curr
+    )
+  const findLast = (array) =>
+    array.reduce((prev, curr) =>
+      prev.highestIndex > curr.highestIndex ? prev : curr
     )
 
   const findBingo = (numbers, board, boardnumber) => {
@@ -97,25 +101,30 @@ const day4pt1 = (file) => {
   // console.log(winners)
 
   const firstWinner = findFirst(winners)
+  const lastWinner = findLast(winners)
+  console.log('lastWinner', lastWinner)
   console.log('firstWinner', firstWinner)
   const firstWinnerBoard = boards[firstWinner.boardID]
+  const lastWinnerBoard = boards[lastWinner.boardID]
   // console.log('firstWinner board', boards[firstWinner.boardID])
 
   const findFirstWinnerNumbers = (winner, winnerInfo) => {
     const winnerNrs = winner.flat()
     const wonAtCall = winnerInfo.highestIndex
-    const numbersAtWin = numbers.slice(0, wonAtCall)
+    const numbersAtWin = numbers.slice(0, wonAtCall + 1)
     const winnerUncalledNrs = winnerNrs.filter((n) => !numbersAtWin.includes(n))
-    const sumOfUncalledNrs = winnerUncalledNrs.reduce((a, b) => a + b, 0)
+    const sumOfUncalledNrs = winnerUncalledNrs.reduce((a, b) => a + b)
+    console.log('numbers', numbers, 'numbers called at win', numbersAtWin)
+    console.log('winning boards nrs', winnerNrs)
     console.log('uncalled numbers', winnerUncalledNrs)
-    console.log('numbers', numbers, 'numbers at win', numbersAtWin)
     console.log('sum of uncalled', sumOfUncalledNrs)
     const winningNumber = numbers[wonAtCall]
     console.log('winning nr', winningNumber)
     console.log('factor', sumOfUncalledNrs * winningNumber)
-    // 80544 too high
+    // 80544, 71328 too high
   }
   findFirstWinnerNumbers(firstWinnerBoard, firstWinner)
+  findFirstWinnerNumbers(lastWinnerBoard, lastWinner)
 }
 
 day4pt1(file)
