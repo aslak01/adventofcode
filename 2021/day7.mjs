@@ -114,10 +114,11 @@ const day7pt1 = (file) => {
     median: checkFuelCostPt2(crabs, crabStats.median),
     spread: checkFuelCostPt2(crabs, crabStats.spread),
     stdDev: checkFuelCostPt2(crabs, Math.round(crabStats.stdDev)),
+    roundedDownAvg: checkFuelCostPt2(crabs, Math.floor(crabStats.avg)),
   }
   console.log('crabs', crabFuelCheck2)
   // 104149135 too high
-  console.log(Math.round(crabStats.avg), 'should be 501')
+  // turns out the problem was some rounding issue with the avg, rounding down solved it
 }
 
 day7pt1(file)
