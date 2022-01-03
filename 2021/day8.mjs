@@ -23,11 +23,11 @@ const day8 = (file) => {
       0: 'cagedb',
       1: 'ab',
     }
-    const list4letterCodes = (arr) => {
+    const list4letterCodes = (arr, len = [7, 4, 3, 2]) => {
       let outp = []
       arr.forEach((a) => {
         a.split(' ').forEach((w) => {
-          if (w.length === 2) outp.push(w)
+          if (w.length === len) outp.push(w)
         })
       })
       return outp
@@ -35,7 +35,7 @@ const day8 = (file) => {
     return list4letterCodes(arr)
   }
 
-  const pt2 = sumOutput(outputValues)
+  const pt2 = sumOutput(linesArray)
   console.log(pt2)
 }
 
