@@ -19,6 +19,23 @@ const day8 = (file) => {
   console.log(countUniques(outputValues))
 
   const sumOutput = (arr) => {
+    // len 2 = 1
+    // len 3 = 7
+    // len 4 = 4
+    // len 5 = 8
+    // Positions
+    //    333
+    //   6   1
+    //   6   1
+    //    444
+    //   7   2
+    //   7   2
+    //    555
+    //
+    // 1: 1, 2
+    // 4: 1, 2, 4, 6
+    // 7: 1, 2. 3
+    // 8: 1, 2, 3, 4, 5, 6, 7
     const codes = {
       0: 'cagedb',
       1: 'ab',
