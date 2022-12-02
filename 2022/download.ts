@@ -22,12 +22,14 @@ const download = async () => {
     } catch {
       await Deno.mkdir(day);
     }
-    const file = await Deno.open(day + "/input.txt", {
+    const inputFile = await Deno.open(day + "/input.txt", {
       create: true,
       write: true,
     });
-    await copy(read, file);
-    file.close();
+    await copy(read, inputFile);
+    inputFile.close();
+    const answerTemplate = await Deno.readTextFile("answer_template.txt");
+    await Deno.writeTextFile(day + "/solution.ts", answerTemplate);
   }
 };
 
