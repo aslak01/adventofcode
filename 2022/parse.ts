@@ -3,7 +3,7 @@ export interface Puzzle {
   blocks: string[][][];
 }
 export const parse = (input: string): Puzzle => {
-  const entries = input.split("\n");
+  const entries = input.trim().split("\n");
   const blocks: string[][][] = [];
   if (entries[entries.length - 1] == "") entries.pop();
   entries.forEach((entry, index) => {
