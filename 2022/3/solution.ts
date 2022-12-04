@@ -5,6 +5,9 @@ const rawPuzzle = await Deno.readTextFile("./input.txt");
 
 const puzzle = parse(rawPuzzle);
 
+const sumArr = (array: number[]): number =>
+  array.reduce((a: number, b: number) => a + b, 0);
+
 const testData = [
   "vJrwpWtwJgWrhcsFMMfFFhFp",
   "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
@@ -58,14 +61,14 @@ const p1 = (input: string[]) => {
   const countPoints = (string: string): number => {
     if (string.length < 1) return 0;
     const values = string.split("").map((c: string) => calcValue(c));
-    return values.reduce((a: number, b: number) => a + b, 0);
+    return sumArr(values);
   };
 
   const results = input.map((str: string) =>
     countPoints(matches(...halfString(str)))
   );
 
-  return results.reduce((a: number, b: number) => a + b, 0);
+  return sumArr(results);
 };
 
 console.log("p1test", p1(testData));
@@ -76,7 +79,7 @@ const p2 = (input: string[]): number => {
   const groups = input.reduce((resultArray, item, index) => {
     const groupIndex = Math.floor(index / perGroup);
     if (!resultArray[groupIndex]) {
-      resultArray[groupIndex] = []; // start a new group
+      resultArray[groupIndex] = [];
     }
     resultArray[groupIndex].push(item);
     return resultArray;
@@ -92,7 +95,7 @@ const p2 = (input: string[]): number => {
   };
 
   const results = groups.map((g) => calcValue(findCommon(g)));
-  return results.reduce((a: number, b: number) => a + b, 0);
+  return sumArr(results);
 };
 
 console.log("p2test", p2(testData));
