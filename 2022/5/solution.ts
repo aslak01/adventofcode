@@ -12,27 +12,19 @@ const splitDataFromInstructions = (puzzle: string[]) => {
 };
 const splitPuzzle = splitDataFromInstructions(puzzle);
 
-// console.log(splitPuzzle);
-
 const deserializeData = (data: string[]) => {
   const removeBrackets = (string: string) =>
     string.replaceAll("[", " ").replaceAll("]", " ");
   const splitByFours = (string: string) => {
-    // typescript bullshit coming up
-    let triplet = "";
+    let quadruplet = "";
     const match = string.match(/.{1,4}/g);
-    if (match !== null) triplet = match as unknown as string;
-    return triplet;
+    if (match !== null) quadruplet = match;
+    return quadruplet;
   };
-  const splitData = data.map((l) => splitByFours(removeBrackets(l)));
-  const whiteSpaceRemovedSplitData = splitData.map((l) =>
-    l.map((e) => e.trim())
-  );
-  const indexesRemoved = whiteSpaceRemovedSplitData.slice(
-    0,
-    whiteSpaceRemovedSplitData.length - 1,
-  );
-  return indexesRemoved;
+  const arrs = data
+    .map((l) => splitByFours(removeBrackets(l)))
+    .map((l) => l.map((e) => e.trim()));
+  return arrs;
 };
 const deserializedData = deserializeData(splitPuzzle.data);
 console.log(deserializedData);
