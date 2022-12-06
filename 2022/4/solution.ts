@@ -33,6 +33,7 @@ const solve = (input: string[]) => {
 
   const p1 = bounds.map((grp) => isWithin(...grp));
   const p2 = bounds.map((grp) => overlaps(...grp));
+
   return [sumArr(p1), sumArr(p2)];
 };
 
