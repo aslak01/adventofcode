@@ -87,7 +87,7 @@ const result = executeInstructions(deserializedData, splitPuzzle.instructions);
 const serializeSolution = (result: { [key: string]: string[][] }) => {
   let letters = [];
   Object.values(result).map((l, i) => {
-    letters.push(" " + i + 1 + ": ");
+    letters.push(" " + (i + 1) + ": ");
     l.map((c) => {
       const letter = c.pop();
       letters.push(letter);
