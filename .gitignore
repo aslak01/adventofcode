@@ -1,3 +1,4 @@
 .txt
 deno.json
 .env
+*.profraw
