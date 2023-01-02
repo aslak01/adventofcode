@@ -1,2 +1,2 @@
-import { parse } from "../parse.ts";
-const puzzle = parse(await Deno.readTextFile("./input.txt")).entries;
+import { parse } from '../functions.ts'
+const puzzle = parse(await Deno.readTextFile('./input.txt'))
