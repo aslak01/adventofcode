@@ -1,0 +1,82 @@
+import { parse } from "../functions.ts";
+const puzzle = parse(await Deno.readTextFile("./input.txt"));
+
+import { range } from "https://x.nest.land/rambda@7.5.0/mod.ts";
+
+type Day14 = [number, number][][];
+
+const lineParse = (line: string): [number, number][] =>
+  line.split("->").map((c) => c.trim().split(",").map((n) => Number(n))) as [
+    number,
+    number,
+  ][];
+
+const pPuzzle = puzzle.map(lineParse);
+// console.log(pPuzzle);
+
+function findExtents(coords: number[][][]): [number, number, number, number] {
+  return coords.reduce((extents, coordArray) => {
+    coordArray.forEach(([y, x]) => {
+      extents[0] = Math.min(extents[0], x);
+      extents[1] = Math.min(extents[1], y);
+      extents[2] = Math.max(extents[2], x);
+      extents[3] = Math.max(extents[3], y);
+    });
+    return extents;
+  }, [Infinity, Infinity, -Infinity, -Infinity]);
+}
+
+const extents = findExtents(pPuzzle);
+// min X, min Y, max X, max Y
+// console.log(extents); // [ 469, 13, 561, 161 ]
+const rangeX = range(0, extents[2] + 1);
+const rangeY = range(extents[1], extents[3] + 1);
+// const lenX = extents[2] - extents[0];
+// const lenY = extents[3] - extents[1];
+
+const plotLine = (
+  line: [number, number][],
+  minX: number,
+  minY: number,
+  matrix: string,
+) => {
+};
+
+const genMatrix = (rX: number[], rY: number[]) => {
+  let matrix = "";
+  matrix + "   " + rangeX.join(" ") + "\n";
+  for (const y of rY) {
+    const row = [];
+    for (const x of rX) {
+      row.push(".");
+    }
+    const index = y < 100 ? y < 10 ? "  " + y : " " + y : y;
+    matrix += index + " " + row.join("   ") + "\n";
+    // matrix += row + "\n";
+  }
+  return matrix;
+};
+const matrix = genMatrix(rangeX, rangeY);
+console.clear();
+console.log(matrix);
+
+// for (const row of test) {
+//   console.log(x + " " + row.join("   "));
+// }
+
+// animating matrix in terminal credit openai
+// let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+
+// function printMatrix(matrix) {
+//   for (let row of matrix) {
+//     console.log(row.join(" "));
+//   }
+// }
+
+// setInterval(() => {
+//   matrix.unshift(matrix.pop());
+//   console.clear();
+//   printMatrix(matrix);
+// }, 1000);
+
+// printMatrix(matrix);
