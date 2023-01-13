@@ -3,6 +3,8 @@ const puzzle = parse(await Deno.readTextFile("./input.txt"));
 
 import { range, uniq } from "https://x.nest.land/rambda@7.5.0/mod.ts";
 
+const jstr = (c) => JSON.stringify(c);
+
 const lineParse = (line: string): [number, number][] =>
   line.split("->").map((c) => c.trim().split(",").map((n) => Number(n))) as [
     number,
@@ -44,37 +46,33 @@ const plotLine = (
   return l;
 };
 
-const walls = uniq(pPuzzle.map(plotLine).flat());
-
+const wallArr = uniq(pPuzzle.map(plotLine).flat());
 const origin = 500 - extents[0];
 
 const genMatrix = (
   rX: number[],
   rY: number[],
   walls: [number, number][],
-  sandOrigin: [number, number],
   sands: [number, number][],
-  sandPos: [number, number] | null = null,
+  sandPos: [number, number],
   labels = false,
 ) => {
-  const wls = JSON.stringify(walls);
+  const wls = jstr(walls);
   let matrix = "";
-  let hasFallingSand = false;
-  if (labels) matrix += "   " + rangeX.join(" ") + "\n";
+  if (labels) {
+    matrix += "   " + rangeX.map((d) => d < 10 ? " " + d : d).join(" ") + "\n";
+  }
   for (const y of rY) {
     const row = [];
     for (const x of rX) {
-      const current = JSON.stringify([x, y]);
-      if (sandPos === null) {
-        sandPos = sandOrigin;
-        const wallBelow = wls.includes(JSON.stringify([x, y + 1]));
-      } // if (current === JSON.stringify([sandOrigin, 0])) row.push("+");
+      const current = jstr([x, y]);
+      if (jstr(sandPos) === current) row.push("o");
       else if (wls.includes(current)) row.push("#");
       else row.push(" ");
     }
     if (labels) {
       const index = y < 100 ? y < 10 ? "  " + y : " " + y : y;
-      matrix += index + " " + row.join("   ") + "\n";
+      matrix += index + " " + row.join("  ") + "\n";
     } else {
       matrix += row.join("") + (y === extents[3] ? "  " : "\n");
     }
@@ -82,23 +80,52 @@ const genMatrix = (
   return matrix;
 };
 
-const matr = genMatrix(rangeX, rangeY, walls);
-// console.clear();
-console.log(matr);
-console.log("indexof first newline", matr.indexOf("\n"));
-console.log("extents x", extents[2] - extents[0]);
-console.log(
-  "matr.length / 94",
-  matr.length / 95,
-  "(94 = x len + backslash and n?)",
-);
-console.log("extents y", extents[3], "extra line from trailing newline?");
-console.log(extents);
+// const matr = genMatrix(rangeX, rangeY, walls, origin);
 
-const movingSand = (matrix: string) => {
-  const sand = "o";
+// console.log(matr);
+
+const moveSand = (
+  wls: [number, number][],
+  sandOrigin: [number, number],
+) => {
+  const sands = [] as [number, number][];
+  const walls = jstr(wls);
+  let sandPos = [0, sandOrigin];
+  let sandStabilised = false;
+  let matrix = [];
+  while (sandStabilised === false) {
+    const barriers = jstr(wls.concat(sands));
+    const below = jstr([sandPos[0] + 1, sandPos[1]]);
+
+    matrix = genMatrix(rangeX, rangeY, wls, sands, sandPos);
+
+    if (barriers.includes(below) === false) {
+      sandPos[0] += 1;
+      console.clear();
+      console.log(matrix);
+      break;
+    } else {
+      // const left = jstr(sandPos[1]-1))
+      // const belowLeft = jstr([sandPos[0]-1, sandPos[1]-1])
+      // const right = jstr(sandPos[1]+1)
+    }
+  }
+  console.clear();
+  console.log(matrix);
 };
 
+const mainLoop = () => {
+  let sandStabilising = true;
+  let sandsFallen = 0;
+
+  while (sandStabilising) {
+    const moveResult = moveSand(wallArr, origin);
+    sandsFallen++;
+    if (moveResult === "abyss") sandStabilising = false;
+  }
+  return sandsFallen;
+};
+mainLoop();
 // animating matrix in terminal credit openai
 // let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 
