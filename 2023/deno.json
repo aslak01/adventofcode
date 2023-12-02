@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "dotenv/": "https://deno.land/std@0.208.0/dotenv/",
+    "fs/": "https://deno.land/std@0.208.0/fs/"
+  },
+  "tasks": {
+    "fetchday": "deno run --allow-read=. --allow-write=. --allow-net main.ts"
+  }
+}
