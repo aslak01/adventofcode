@@ -1,3 +1,4 @@
 .txt
 .env
 *.profraw
+deno.lock
