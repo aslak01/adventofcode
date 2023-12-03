@@ -1,9 +1,9 @@
 import { make_day } from "./make_day.ts";
+const day = Deno.args[0];
 
-async function main() {
+async function main(day: string) {
   const start = performance.now();
 
-  const day = Deno.args[0];
   await make_day(day);
 
   const finish = performance.now();
@@ -11,4 +11,4 @@ async function main() {
   console.log(`Finished setting up day ${day} in ${delta} ms`);
 }
 
-main();
+main(day);
