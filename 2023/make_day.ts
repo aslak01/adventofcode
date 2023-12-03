@@ -9,11 +9,30 @@ export async function make_day(day: string) {
   const input = await download_input(day);
 
   Deno.writeTextFileSync(`./${dayName}/input.ts`, input);
-  Deno.writeTextFileSync(`./${dayName}/test.ts`, "export const test = [\n]");
+
+  ["a", "b"].map((pt) =>
+    Deno.writeTextFileSync(
+      `./${dayName}/test-${pt}.ts`,
+      "export const test = [\n\n]",
+    )
+  );
+
   ["a", "b"].map((pt) =>
     Deno.writeTextFileSync(
       `./${dayName}/${pt}.ts`,
-      `import { input } from "./input.ts"`,
+      `import { input } from "./input.ts"
+import { test } from "./test-${pt}.ts";
+
+const isTest = Deno.args[0];
+
+function main() {
+  const data = isTest ? test : input;
+  // TODO
+  // const answer = 
+  console.log(answer);
+}
+main();
+`,
     )
   );
 }
