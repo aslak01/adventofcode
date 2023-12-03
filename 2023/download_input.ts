@@ -2,7 +2,8 @@ import { load } from "dotenv/mod.ts";
 
 const env = await load();
 const cookie = env["COOKIE"];
-const headers = new Headers({ cookie });
+const ua = "github.com/aslak01/adventofcode/tree/master/2023";
+const headers = new Headers({ cookie, "user-agent": ua });
 
 export async function download_input(day: string) {
   const url = `https://adventofcode.com/2023/day/${day}/input`;
