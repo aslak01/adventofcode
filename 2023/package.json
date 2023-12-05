@@ -1,1 +1,5 @@
-{}
+{
+  "scripts": {
+    "fetchday": "bun run main.ts"
+  }
+}

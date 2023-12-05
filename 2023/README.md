@@ -1,5 +1,5 @@
 Usage
 
 ```bash
-deno task fetchday DAY_NUMBER
+bun run fetchday DAY_NUMBER
 ```
