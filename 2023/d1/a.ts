@@ -10,7 +10,7 @@ function concatFirstNLastNr(str: string) {
   return Number(`${first}${last}`);
 }
 
-const isTest = Deno.args[0];
+const isTest = Bun.argv[2];
 
 function main() {
   const data = isTest ? test : input;

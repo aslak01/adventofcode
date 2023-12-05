@@ -1,5 +1,5 @@
 import { make_day } from "./make_day.ts";
-const day = Deno.args[0];
+const day = Bun.argv[2];
 
 async function main(day: string) {
   const start = performance.now();

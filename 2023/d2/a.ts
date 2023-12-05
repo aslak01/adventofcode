@@ -1,7 +1,7 @@
 import { input } from "./input.ts";
 import { test } from "./test-a.ts";
 
-const isTest = Deno.args[0];
+const isTest = Bun.argv[2];
 
 const total = {
   red: 12,
