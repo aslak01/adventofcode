@@ -1,5 +1,8 @@
 {
   "scripts": {
     "fetchday": "bun run main.ts"
+  },
+  "devDependencies": {
+    "bun-types": "^1.0.15"
   }
 }
