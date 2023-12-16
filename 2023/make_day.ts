@@ -15,27 +15,30 @@ export async function make_day(day: string) {
 
   const input = await download_input(day);
 
-  Bun.write(`${folderName}/input.ts`, input);
+  Bun.write(`${folderName}/input.txt`, input);
 
   ["a", "b"].map((pt) =>
     Bun.write(
       `${folderName}/test-${pt}.ts`,
-      "export const test = [\n\n]",
+      "export const test = `\n\n`",
     )
   );
 
   ["a", "b"].map((pt) =>
     Bun.write(
       `${folderName}/${pt}.ts`,
-      `import { input } from "./input.ts"
-import { test } from "./test-${pt}.ts";
+      `const raw = await Bun.file("${folderName}/input.txt").text();
+const input = raw.split("\\n")
+import { test as rawTest } from "./test-${pt}.ts";
+const test = rawTest.trim().split("\\n")
 
-const isTest = Bun.argv[0];
+
+const isTest = Bun.argv[2];
 
 function main() {
   const data = isTest ? test : input;
   // TODO
-  // const answer = 
+  const answer = "42"
   console.log(answer);
 }
 main();

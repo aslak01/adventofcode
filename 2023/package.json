@@ -2,6 +2,7 @@
   "scripts": {
     "fetchday": "bun run main.ts"
   },
+  "type": "module",
   "devDependencies": {
     "bun-types": "^1.0.15"
   }

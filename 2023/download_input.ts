@@ -8,7 +8,8 @@ export async function download_input(day: string) {
     headers,
   });
   const input = await req.text();
-  const parsedInput = input.trim().split("\n").map((l) => `"${l}"`);
-  console.log(`Parsed ${parsedInput.length} lines of input`);
-  return `export const input = [${parsedInput}]`;
+  return input.trim();
+  // const parsedInput = input.trim().split("\n").map((l) => `"${l}"`);
+  // console.log(`Parsed ${parsedInput.length} lines of input`);
+  // return `export const input = [${parsedInput}]`;
 }
