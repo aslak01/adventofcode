@@ -16,15 +16,15 @@ get day:
     fi
 
     # Create inputs directory if it doesn't exist
-    mkdir -p inputs
+    daydir=day{{day}}
+    mkdir -p ${daydir}
 
     # Download input file
     url="https://adventofcode.com/${AOC_YEAR}/day/{{day}}/input"
-    echo "token: ${AOC_TOKEN}"
-    echo "downloading ${url}"
+    echo "downloading ${url} with token ${AOC_TOKEN:0:10}"
     curl --fail \
         -H "Cookie: session=${AOC_TOKEN}" \
-        -o "inputs/day{{day}}.txt" \
+        -o "${daydir}/input.txt" \
         ${url}
 
     if [ $? -eq 0 ]; then
