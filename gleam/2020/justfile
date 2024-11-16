@@ -14,13 +14,14 @@ get day:
     fi
 
     daydir=day{{day}}
-    mkdir -p ${daydir}
+
+    gleam new ${daydir}
 
     url="https://adventofcode.com/${AOC_YEAR}/day/{{day}}/input"
     echo "downloading ${url} with token ${AOC_TOKEN:0:10}"
     curl --fail \
         -H "Cookie: session=${AOC_TOKEN}" \
-        -o "${daydir}/input.txt" \
+        -o "${daydir}/src/input.txt" \
         ${url}
 
     if [ $? -eq 0 ]; then
