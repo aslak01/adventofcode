@@ -1,12 +1,10 @@
 set dotenv-load
 
-# Default command shows usage
 default:
     @echo "Usage: just get <day>"
     @echo "Example: just get 1"
     @echo "Downloads input for specified day from Advent of Code ${AOC_YEAR}"
 
-# Download input for specified day
 get day:
     #!/bin/bash
     # Ensure day is within valid range
@@ -15,11 +13,9 @@ get day:
         exit 1
     fi
 
-    # Create inputs directory if it doesn't exist
     daydir=day{{day}}
     mkdir -p ${daydir}
 
-    # Download input file
     url="https://adventofcode.com/${AOC_YEAR}/day/{{day}}/input"
     echo "downloading ${url} with token ${AOC_TOKEN:0:10}"
     curl --fail \
@@ -35,7 +31,6 @@ get day:
         exit 1
     fi
 
-# Verify environment configuration
 check-env:
     #!/bin/bash
     if [ -z "${AOC_TOKEN}" ]; then
