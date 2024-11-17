@@ -3,11 +3,13 @@ import gleam/list
 import gleam/result
 import gleam/string
 import simplifile
+import solution1
 
 pub fn main() {
-  case read_input() {
+  case read_input("./src/input.txt") {
     Ok(lines) -> {
-      list.each(lines, io.debug)
+      let sol = solution1.solve1(lines)
+      io.debug(sol)
       Ok(Nil)
     }
     Error(error) -> {
@@ -17,8 +19,8 @@ pub fn main() {
   }
 }
 
-fn read_input() {
-  simplifile.read(from: "./src/input.txt")
+fn read_input(path: String) {
+  simplifile.read(from: path)
   |> result.map_error(fn(err) {
     case err {
       simplifile.Enoent -> "File not found"
@@ -28,7 +30,6 @@ fn read_input() {
     }
   })
   |> result.map(split_to_lines)
-  // |> result.map(join_lines)
 }
 
 fn split_to_lines(content: String) -> List(String) {
@@ -36,7 +37,3 @@ fn split_to_lines(content: String) -> List(String) {
   string.split(content, "\n")
   |> list.filter(fn(line) { line != "" })
 }
-// fn join_lines(lines: List(String)) -> String {
-//   io.println("hi mam")
-//   string.join(lines, "\n")
-// }
