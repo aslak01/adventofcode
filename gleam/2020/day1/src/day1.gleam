@@ -1,3 +1,4 @@
+import argv
 import gleam/io
 import gleam/list
 import gleam/result
@@ -6,14 +7,21 @@ import simplifile
 import solution1
 
 pub fn main() {
-  case read_input("./src/input.txt") {
-    Ok(lines) -> {
-      let sol = solution1.solve1(lines)
-      io.debug(sol)
-      Ok(Nil)
-    }
-    Error(error) -> {
-      io.println("reading failed" <> error)
+  case argv.load().arguments {
+    ["1"] ->
+      Ok(
+        read_input("./src/input.txt")
+        |> result.map(solution1.solve_1)
+        |> result.map(io.debug),
+      )
+    ["2"] ->
+      Ok(
+        read_input("./src/input.txt")
+        |> result.map(solution1.solve_2)
+        |> result.map(io.debug),
+      )
+    _ -> {
+      io.println("sorry, try 1 or 2")
       Error(Nil)
     }
   }
@@ -33,7 +41,6 @@ fn read_input(path: String) {
 }
 
 fn split_to_lines(content: String) -> List(String) {
-  io.println("hi mum")
   string.split(content, "\n")
   |> list.filter(fn(line) { line != "" })
 }
