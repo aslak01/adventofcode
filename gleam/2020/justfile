@@ -32,6 +32,9 @@ get day:
         exit 1
     fi
 
+    cp scaffold/day.gleam ${daydir}/src/day{{day}}.gleam
+    cp scaffold/solution.gleam ${daydir}/src/
+
 check-env:
     #!/bin/bash
     if [ -z "${AOC_TOKEN}" ]; then
