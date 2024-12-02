@@ -1,3 +1,3 @@
-export function solution(input: unknown): number {
+export function solve(input: unknown): number {
   return 42;
 }
