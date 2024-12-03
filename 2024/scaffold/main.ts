@@ -1,15 +1,20 @@
-const raw = await Bun.file("input.txt").text();
-const input = raw.trim().split("\n");
-const testdata = await Bun.file("test.txt").text();
-const test = testdata.trim().split("\n");
-const isTest = Bun.argv[2];
+import { solve, solve_b } from "./solution";
 
-import { solve } from "./solution";
+const loadFile = async (path: string) => (await Bun.file(path).text()).trim();
 
-function main() {
-  const data = isTest ? test : input;
-  // TODO
-  const answer = solve(data);
-  console.log(answer);
+async function main() {
+  const input = await loadFile("input.txt");
+  const test = await loadFile("test.txt");
+  const test2 = await loadFile("test2.txt");
+
+  const useP2 = Bun.argv[2];
+  const testMode = Bun.argv[3];
+
+  const testData = useP2 ? test2 : test;
+  const data = testMode ? testData : input;
+  const solution = useP2 ? solve_b : solve;
+
+  console.log(solution(data));
 }
+
 main();
