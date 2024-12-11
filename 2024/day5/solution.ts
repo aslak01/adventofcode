@@ -1,15 +1,15 @@
+import { sum } from "../utils/index.ts";
 export function solve(input: string): number {
-  console.log(input);
   const [rawRules, rawUpdates] = input
     .split("\n\n")
     .map((raw) => raw.split("\n"));
 
-  console.log(rawRules, rawUpdates);
   const rules = parseRules(rawRules);
   const updates = parseUpdates(rawUpdates);
-  console.log(rules, updates);
+  const validUpdates = updates.filter(xBeforeY(rules));
+  const midNumbers = validUpdates.map(findMiddle);
 
-  return 43;
+  return sum(midNumbers);
 }
 
 export function solve_b(input: unknown): number {
@@ -30,11 +30,25 @@ function updateFollowsRules(rules: Rules, updates: Updates): boolean {
   return true;
 }
 
-function xBeforeY(nums: number[], rules: [number, number]): boolean {
-  const [x, y] = rules;
-  const xIndex = nums.indexOf(x);
-  const yIndex = nums.indexOf(y);
-  if (xIndex === -1 && yIndex === -1) return true;
+function xBeforeY(rules: [number, number][]) {
+  return function (nums: number[]): boolean {
+    return rules.every(([x, y]) => {
+      const xIndex = nums.indexOf(x);
+      const yIndex = nums.indexOf(y);
 
-  if (xIndex) return true;
+      // if neither mentioned in rules we're fine
+      if (xIndex === -1 && yIndex === -1) return true;
+      // if only one of the two are mentioned in the rule, we're fine
+      if (xIndex === -1 || yIndex === -1) return true;
+      // if x is before y, rule is followed
+      return xIndex < yIndex;
+    });
+  };
+}
+
+function findMiddle<T>(arr: T[]): T {
+  if (arr.length % 2 === 0) {
+    throw new Error("Array must have odd number of entries");
+  }
+  return arr[Math.floor(arr.length / 2)];
 }
