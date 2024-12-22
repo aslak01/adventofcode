@@ -8,7 +8,7 @@ async function main() {
   const test2 = await loadFile("test2.txt");
 
   const testMode = Bun.argv[2] === "test";
-  const useP2 = Bun.argv[3];
+  const useP2 = Bun.argv[2] === "b" || Bun.argv[3] === "b";
 
   const testData = useP2 ? test2 : test;
   const data = testMode ? testData : input;

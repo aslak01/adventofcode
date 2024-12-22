@@ -29,10 +29,7 @@ export function solve_b(input: string): number {
   const invalid = updates.filter((update) => !validator(update));
   const enforcer = createRuleEnforcer(rules);
   const resultUpdates = invalid.map(enforcer);
-  console.log(resultUpdates);
   const midNumbers = resultUpdates.map(findMiddle);
-  console.log(midNumbers);
-  // 7198 too high
   return sum(midNumbers);
 }
 
@@ -53,8 +50,6 @@ function xBeforeY(rules: [number, number][]) {
       const xIndex = nums.indexOf(x);
       const yIndex = nums.indexOf(y);
 
-      // if neither mentioned in rules we're fine
-      if (xIndex === -1 && yIndex === -1) return true;
       // if only one of the two are mentioned in the rule, we're fine
       if (xIndex === -1 || yIndex === -1) return true;
       // if x is before y, rule is followed
@@ -81,38 +76,31 @@ function findBrokenRules(
   });
 }
 
-// Enhanced enforcer function
 function createRuleEnforcer(rules: [number, number][]) {
   const validateRules = xBeforeY(rules);
 
   function enforceRules(nums: number[]): number[] {
-    // If rules are already satisfied, return the array as is
     if (validateRules(nums)) {
       return nums;
     }
 
     function fixViolations(array: number[]): number[] {
-      // Find all currently broken rules
       const brokenRules = findBrokenRules(array, rules);
 
-      // If no broken rules, we're done
       if (brokenRules.length === 0) {
         return array;
       }
 
-      // Fix the first broken rule
       const [x, y] = brokenRules[0];
       const xIndex = array.indexOf(x);
       const yIndex = array.indexOf(y);
 
-      // Create new array with swapped elements
       const newArray = [...array];
       [newArray[xIndex], newArray[yIndex]] = [
         newArray[yIndex],
         newArray[xIndex],
       ];
 
-      // Recursively fix remaining violations
       return fixViolations(newArray);
     }
 
