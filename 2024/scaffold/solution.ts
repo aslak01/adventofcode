@@ -1,4 +1,4 @@
-export function solve(input: unknown): number {
+export function solve_a(input: unknown): number {
   return 42;
 }
 

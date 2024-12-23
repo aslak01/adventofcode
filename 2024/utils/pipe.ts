@@ -1,7 +1,8 @@
 type UnaryFunction<T, R> = (arg: T) => R;
 
-export function pipe<T>(
+export function pipe<T, R>(
+  fn1: UnaryFunction<T, any>,
   ...fns: UnaryFunction<any, any>[]
-): UnaryFunction<T, any> {
-  return (value: T) => fns.reduce((acc, fn) => fn(acc), value);
+): UnaryFunction<T, R> {
+  return (value) => fns.reduce((acc, fn) => fn(acc), fn1(value));
 }

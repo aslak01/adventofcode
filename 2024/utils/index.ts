@@ -1,3 +1,6 @@
-export function sum(xs: number[]): number {
-  return xs.reduce((acc, curr) => acc + curr, 0);
-}
+import { map } from "./map";
+import { pipe } from "./pipe.ts";
+import { sum } from "./sum.ts";
+import { filterByReference } from "./filterByReference.ts";
+
+export { filterByReference, map, pipe, sum };
