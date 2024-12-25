@@ -1,4 +1,4 @@
-import { solve_a, solve_b } from "./solution";
+import { solver } from "./solution";
 
 const loadFile = async (path: string) => (await Bun.file(path).text()).trim();
 
@@ -13,7 +13,7 @@ async function main() {
 
   const testData = a ? test : test2;
   const data = testMode ? testData : input;
-  const solve = a ? solve_a : solve_b;
+  const solve = a ? solver(data).a : solver(data).b;
 
   console.log("answer:");
   console.log(solve(data));
