@@ -15,7 +15,7 @@ get day:
 
     daydir=day{{day}}
 
-    mkdir ${daydir}
+    mkdir -p ${daydir}
 
     url="https://adventofcode.com/${AOC_YEAR}/day/{{day}}/input"
     echo "downloading ${url} with token ${AOC_TOKEN:0:10}"
