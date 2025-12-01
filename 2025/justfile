@@ -1,0 +1,60 @@
+set dotenv-load
+
+default:
+    @echo "Usage: just get <day>"
+    @echo "Example: just get 1"
+    @echo "Downloads input for specified day from Advent of Code ${AOC_YEAR}"
+
+get day:
+    #!/bin/bash
+    if [ "{{day}}" -lt 1 ] || [ "{{day}}" -gt 25 ]; then
+        echo "Error: Day must be between 1 and 25"
+        exit 1
+    fi
+
+    daydir=day{{day}}
+
+    mkdir -p ${daydir}
+
+    url="https://adventofcode.com/${AOC_YEAR}/day/{{day}}/input"
+    echo "downloading ${url} with token ${AOC_TOKEN:0:10}"
+    curl --fail \
+        -H "Cookie: session=${AOC_TOKEN}" \
+        -o "${daydir}/input.txt" \
+        ${url}
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully downloaded input for day {{day}} (${AOC_YEAR})"
+    else
+        echo "Failed to download input. Please check your session token and internet connection"
+        rm -f "${daydir}/input.txt"
+        exit 1
+    fi
+
+    cd ${daydir}
+    gleam new . --name day{{day}} --skip-git
+    gleam add simplifile argv
+
+    # Copy scaffold files with day-specific naming
+    cp ../scaffold/src/solution.gleam src/day{{day}}.gleam
+    cp ../scaffold/test/solution_test.gleam test/day{{day}}_test.gleam
+    sed -i '' 's/dayN/day{{day}}/g' test/day{{day}}_test.gleam
+
+    echo "Gleam project created. Run 'gleam run' to execute, 'gleam test' to test."
+
+check-env:
+    #!/bin/bash
+    if [ -z "${AOC_TOKEN}" ]; then
+        echo "ERROR: AOC_TOKEN is not set in .env file"
+        exit 1
+    fi
+    if [ -z "${AOC_YEAR}" ]; then
+        echo "ERROR: AOC_YEAR is not set in .env file"
+        exit 1
+    fi
+    if ! [[ "${AOC_YEAR}" =~ ^20[0-9]{2}$ ]]; then
+        echo "ERROR: AOC_YEAR must be in format 20XX"
+        exit 1
+    fi
+    echo "Environment configured for Advent of Code ${AOC_YEAR}"
+    echo "Session token is set"
