@@ -27,17 +27,11 @@ fn solve(input: String, is_part_b: Bool) -> Nil {
 
 fn part_a(input: String) -> Nil {
   io.println("Part A:")
-  // io.println(input)
   let lines =
     string.trim(input)
     |> string.split("\n")
 
   let parsed = list.map(lines, parse_instruction)
-
-  // debug 
-  parsed
-  |> list.take(5)
-  |> list.each(fn(x) { io.println(string.inspect(x)) })
 
   parsed
   |> result.values
