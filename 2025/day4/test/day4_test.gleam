@@ -1,26 +1,33 @@
-import dayN
+import day4
 
 import gleam/int
 import gleam/io
 import gleeunit
 import gleeunit/should
 
-const example_input = "
-paste
-example
-here
-"
-
 pub fn main() -> Nil {
   gleeunit.main()
 }
 
-const answer_a = 1
+const example_input = "
+..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.
+"
+
+const answer_a = 13
 
 const answer_b = 2
 
 pub fn part_a_example_test() {
-  let solution = dayN.solve(example_input, False)
+  let solution = day4.solve(example_input, False)
 
   should.equal(answer_a, solution)
 
@@ -32,7 +39,7 @@ pub fn part_a_example_test() {
 }
 
 pub fn part_b_example_test() {
-  let solution = dayN.solve(example_input, True)
+  let solution = day4.solve(example_input, True)
 
   should.equal(answer_b, solution)
 

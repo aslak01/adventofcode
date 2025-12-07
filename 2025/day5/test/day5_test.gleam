@@ -1,26 +1,35 @@
-import dayN
-
 import gleam/int
 import gleam/io
 import gleeunit
 import gleeunit/should
 
-const example_input = "
-paste
-example
-here
-"
+// Import your day module to test the solve function
+import day5
 
 pub fn main() -> Nil {
   gleeunit.main()
 }
 
-const answer_a = 1
+const example_input = "
+3-5
+10-14
+16-20
+12-18
+
+1
+5
+8
+11
+17
+32
+"
+
+const answer_a = 3
 
 const answer_b = 2
 
 pub fn part_a_example_test() {
-  let solution = dayN.solve(example_input, False)
+  let solution = day5.solve(example_input, False)
 
   should.equal(answer_a, solution)
 
@@ -32,7 +41,7 @@ pub fn part_a_example_test() {
 }
 
 pub fn part_b_example_test() {
-  let solution = dayN.solve(example_input, True)
+  let solution = day5.solve(example_input, True)
 
   should.equal(answer_b, solution)
 
